@@ -112,7 +112,7 @@
    服务器**IP地址**为运行机器人后打印出的地址
 3. 打开Thonny，连接机器人与电脑，删除esp32中除boot.py文件以外的所有文件
    将**最新代码选中**到esp32中 点击 **上传到/**
-   ![[Pasted image 20240104192608.png|375]]
+   ![下载](img\下载.png)
    机器人红灯是<font color="#ff0000">充电中</font>，绿灯是<font color="#00b050">充满电</font>，蓝灯是<font color="#00b0f0">已上电</font>
 4. 打开esp32的 **config.txt** 修改配置信息
    ❗调试阶段建议 **清除main.py里的程序** 或 **关闭开机运行wifi**
