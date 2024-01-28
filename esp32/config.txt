@@ -1,0 +1,6 @@
+main on
+wifi on
+PASSWORD abc123123abc1237
+SSID mkm_iqoowifi
+bot_name yuk2
+team blue
