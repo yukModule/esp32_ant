@@ -26,8 +26,12 @@ class tcp_user:
     def listen_(self):
         '''循环监听'''
         while True:
-            recv_data = self.tcp_client.recv(1024)
-            print(self.bot_name,':', recv_data.decode(encoding = 'utf-8'))
+            try:
+                recv_data = self.tcp_client.recv(1024)
+                print(self.bot_name,':', recv_data.decode(encoding = 'utf-8'))
+            except:
+                print('连接中断')
+                break
 
     def thread_listen(self):
         '''开启多线程监听'''

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+# 获取连接本机热点的ipv4地址
 
 import platform
 import os
 import time
 import threading
 import socket
- 
+
+ipv4_pc = ''
 live_ip = 0
 live_ip_list = []
  
@@ -35,10 +37,12 @@ def find_ip(ip_prefix):
     '''''
     给出当前的ip地址段 ，然后扫描整个段所有地址
     '''
+    global ipv4_pc
     threads = []
     for i in range(1, 256):
         ip = '%s.%s' % (ip_prefix, i)
-        threads.append(threading.Thread(target=ping_ip, args={ip, }))
+        if ip!=ipv4_pc:
+            threads.append(threading.Thread(target=ping_ip, args={ip, }))
     for i in threads:
         i.start()
     for i in threads:
@@ -50,8 +54,9 @@ def find_local_ip():
     获取本机当前ipv4地址
     :return: 返回本机ipv4地址
     """
-    ipv4s=socket.gethostbyname_ex(socket.gethostname())[2][0]
-    return ipv4s
+    global ipv4_pc
+    ipv4_pc=socket.gethostbyname_ex(socket.gethostname())[2][0]
+    return ipv4_pc
 
 def scan_ip():
     global live_ip_list
@@ -65,5 +70,6 @@ def scan_ip():
     print('本次扫描共检测到本网络存在%s台设备' % live_ip)
     
 def get_ip():
+    '''返回扫描已连接的ipv4'''
     global live_ip_list
     return live_ip_list
