@@ -1,6 +1,8 @@
 import socket
 from threading import Thread
 from time import sleep
+from get_bot_ipv4 import remove_ip
+import bot_init as bot_init_s  # 防止循环调用
 
 class tcp_user:
     def __init__(self,ip,bot_name):
@@ -13,6 +15,7 @@ class tcp_user:
         self.tcp_client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.tcp_client.connect((ip,7788))
         self.bot_name = bot_name
+        self.ip = ip
         pass
 
     def send_data(self,data):
@@ -31,6 +34,8 @@ class tcp_user:
                 print(self.bot_name,':', recv_data.decode(encoding = 'utf-8'))
             except:
                 print('连接中断')
+                remove_ip(self.ip) # 清除断掉的ip
+                bot_init_s.remove_bot_dic(self.ip) # 清除断掉的对象
                 break
 
     def thread_listen(self):

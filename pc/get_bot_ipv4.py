@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # 获取连接本机热点的ipv4地址
 
 import platform
@@ -42,7 +41,10 @@ def find_ip(ip_prefix):
     for i in range(1, 256):
         ip = '%s.%s' % (ip_prefix, i)
         if ip!=ipv4_pc:
-            threads.append(threading.Thread(target=ping_ip, args={ip, }))
+            if ip in live_ip_list: # 排除已经建立连接的ip
+                pass
+            else:
+                threads.append(threading.Thread(target=ping_ip, args={ip, }))
     for i in threads:
         i.start()
     for i in threads:
@@ -60,7 +62,6 @@ def find_local_ip():
 
 def scan_ip():
     global live_ip_list
-    live_ip_list = []
     print("开始扫描时间: %s" % time.ctime())
     addr = find_local_ip()
     args = "".join(addr)
@@ -73,3 +74,9 @@ def get_ip():
     '''返回扫描已连接的ipv4'''
     global live_ip_list
     return live_ip_list
+
+def remove_ip(list_):
+    '''清除已不可用的ip'''
+    global live_ip_list
+    if list_ in live_ip_list:
+        live_ip_list.remove(list_)
