@@ -1,3 +1,5 @@
+# 机器人对象，多线程收发处理
+
 import socket
 from threading import Thread
 from time import sleep
@@ -33,7 +35,7 @@ class tcp_user:
                 recv_data = self.tcp_client.recv(1024)
                 print(self.bot_name,':', recv_data.decode(encoding = 'utf-8'))
             except:
-                print('连接中断')
+                print('监听超时--连接中断')
                 remove_ip(self.ip) # 清除断掉的ip
                 bot_init_s.remove_bot_dic(self.ip) # 清除断掉的对象
                 break
