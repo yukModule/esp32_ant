@@ -11,7 +11,7 @@ bot_num = len(get_ip())
 bot_list = [_ for _ in range(bot_num)] 
 bot_dic = {}
 
-
+# 筛选可用连接
 for i in range(bot_num):
     print('尝试建立连接',i,':',get_ip()[i])
     try:
