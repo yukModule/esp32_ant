@@ -6,26 +6,23 @@ from get_bot_ipv4 import get_ip ,scan_ip
 # 扫描可用ip
 def init():
     '''初始化'''
-    global bot_dic, ip_num, bot_list
+    global bot_dic, bot_list
     scan_ip()
-    ip_num = len(get_ip())
 
     # 生成机器人对象
-    bot_list = [_ for _ in range(ip_num)] 
     bot_dic = {}
 
     # 筛选可用连接
-    for i in range(ip_num):
+    for i in range(len(get_ip())):
         print('尝试建立连接',i,':',get_ip()[i])
         try:
             if get_ip()[i] in bot_dic:
                 pass
             else:
-                bot_list[i] = tcp_user(get_ip()[i],'yuk2')
-                bot_list[i].thread_listen()
-                bot_list[i].send_pass()
+                bot_dic[get_ip()[i]] = [tcp_user(get_ip()[i],'yuk2'),'yuk2']
+                bot_dic[get_ip()[i]][0].thread_listen()
+                bot_dic[get_ip()[i]][0].send_pass()
                 print(i,get_ip()[i],'建立成功')
-                bot_dic[get_ip()[i]] = [bot_list[i],'yuk2']
         except:
             print(i,get_ip()[i],'不可用或没有开启TCP服务器')
 
@@ -61,19 +58,18 @@ def remove_bot_dic(dic_ip):
 
 def rescan():
     '''排除已连接ip从新扫描'''
-    global bot_dic, bot_list
+    global bot_dic
     scan_ip()
-    for i in range(ip_num):
+    for i in range(len(get_ip())):
         print('尝试建立连接',i,':',get_ip()[i])
         try:
             if get_ip()[i] in bot_dic:
                 pass
             else:
-                bot_list[i] = tcp_user(get_ip()[i],'yuk2')
-                bot_list[i].thread_listen()
-                bot_list[i].send_pass()
+                bot_dic[get_ip()[i]] = [tcp_user(get_ip()[i],'yuk2'),'yuk2']
+                bot_dic[get_ip()[i]][0].thread_listen()
+                bot_dic[get_ip()[i]][0].send_pass()
                 print(i,get_ip()[i],'建立成功')
-                bot_dic[get_ip()[i]] = [bot_list[i],'yuk2']
         except:
             print(i,get_ip()[i],'不可用或没有开启TCP服务器')
     print('可用连接:',bot_dic)
