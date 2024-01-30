@@ -153,7 +153,7 @@ team blue
 - **WS2812**.py
    - ws2812RGB灯驱动
 
-### TCP通信命令
+### 机器人TCP通信指令
 - `/connect <wifi名> <wifi密码>` 执行后设置并保存WiFi名和密码，连接该WiFi，开启TCP服务器
 - `/say2wifi <信息>` 执行后通过TCP发送该<信息> 到客户端
 - `/say2inf <信息>` 执行后通过调用红外发送该<信息>
@@ -166,12 +166,12 @@ team blue
 - `/team <队伍名> ` 设置机器人队伍
 - `/randomcolor`  随机ws2812的颜色一次
 
-### PC端口
+### PC端启动
 - 运行pc文件下的main.py
 - 确保机器人连接的是pc电脑开启的热点
 - 运行后自动连接
 
-#### PC客户端指令
+### PC客户端指令
 - `/liveip` 查看当前已经建立的连接
 - `/rescan` 从新扫描并建立新的连接
-- `192.168.xxx.xxx:/wryyyyy` 向ip为192.168.xxx.xxx的服务器发送wryyyyy
+- `192.168.xxx.xxx:/wryyyyy` 向ip为192.168.xxx.xxx的服务器发送**/wryyyyy**
