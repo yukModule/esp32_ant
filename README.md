@@ -1,12 +1,12 @@
 # 震动驱动机器人
 
 ## 参考
-[振动驱动的微型机器人非完整约束补偿的定位方法 (engineering.org.cn)](https://www.engineering.org.cn/ch/article/16557/detail)
-[NN机器人--微型视觉控制振动机器人 - 嘉立创EDA开源硬件平台 (oshwhub.com)](https://oshwhub.com/shukkkk/zhen-dong-ji-qi-ren_copy_copy_copy)
-[【ESP32最全学习笔记（基础篇）——4.ESP32 引脚介绍】「已注销」的博客-CSDN博客](https://blog.csdn.net/m0_46509684/article/details/129105888)
-[MicroPython for ESP32 多线程问题及解决方案 - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv16282686/)
-[kilobot-超赞的集群机器人 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/439647295)
-[GPIO模拟时序控制外设4——红外发射管-CSDN博客](https://blog.csdn.net/qq_41954556/article/details/131414915)
+- [振动驱动的微型机器人非完整约束补偿的定位方法 (engineering.org.cn)](https://www.engineering.org.cn/ch/article/16557/detail)
+- [NN机器人--微型视觉控制振动机器人 - 嘉立创EDA开源硬件平台 (oshwhub.com)](https://oshwhub.com/shukkkk/zhen-dong-ji-qi-ren_copy_copy_copy)
+- [【ESP32最全学习笔记（基础篇）——4.ESP32 引脚介绍】「已注销」的博客-CSDN博客](https://blog.csdn.net/m0_46509684/article/details/129105888)
+- [MicroPython for ESP32 多线程问题及解决方案 - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv16282686/)
+- [kilobot-超赞的集群机器人 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/439647295)
+- [GPIO模拟时序控制外设4——红外发射管-CSDN博客](https://blog.csdn.net/qq_41954556/article/details/131414915)
 
 ## 介绍
 **项目**概述: 
@@ -168,5 +168,10 @@ team blue
 
 ### PC端口
 - 运行pc文件下的main.py
-	- 修改ip地址【机器人运行后打印的ip】
-	- 回车发送
+- 确保机器人连接的是pc电脑开启的热点
+- 运行后自动连接
+
+#### PC客户端指令
+- `/liveip` 查看当前已经建立的连接
+- `/rescan` 从新扫描并建立新的连接
+- `192.168.xxx.xxx:/wryyyyy` 向ip为192.168.xxx.xxx的服务器发送wryyyyy

@@ -65,6 +65,7 @@ def scan_ip():
     print("开始扫描时间: %s" % time.ctime())
     addr = find_local_ip()
     args = "".join(addr)
+    print('本机ip:', args)
     ip_pre = '.'.join(args.split('.')[:-1])
     find_ip(ip_pre)
     print("扫描结束时间 %s" % time.ctime())
