@@ -134,6 +134,10 @@ bot_name yuk2
 team blue
 
 ```
+5. pc段python库
+   1. pip install opencv-contrib-python==4.7.0.72 -i https://pypi.tuna.tsinghua.edu.cn/simple --verbose
+6. 相机标定
+   1. https://blog.csdn.net/sunnyrainflower/article/details/131112182
 
 ### 程序文件功能概述
 - **boot**.py
