@@ -9,16 +9,16 @@ import socket
 ipv4_pc = ''
 live_ip = 0
 live_ip_list = []
- 
- 
+
+
 def get_os():
     os = platform.system()
     if os == "Windows":
         return "n"
     else:
         return "c"
- 
- 
+
+
 def ping_ip(ip_str):
     cmd = ["ping", "-{op}".format(op=get_os()),
            "1", ip_str]
@@ -30,8 +30,8 @@ def ping_ip(ip_str):
             live_ip += 1
             live_ip_list.append(ip_str)
             break
- 
- 
+
+
 def find_ip(ip_prefix):
     '''''
     给出当前的ip地址段 ，然后扫描整个段所有地址
@@ -49,8 +49,8 @@ def find_ip(ip_prefix):
         i.start()
     for i in threads:
         i.join()
- 
- 
+
+
 def find_local_ip():
     """
     获取本机当前ipv4地址
@@ -59,6 +59,7 @@ def find_local_ip():
     global ipv4_pc
     ipv4_pc=socket.gethostbyname_ex(socket.gethostname())[2][0]
     return ipv4_pc
+
 
 def scan_ip():
     global live_ip_list
@@ -70,11 +71,13 @@ def scan_ip():
     find_ip(ip_pre)
     print("扫描结束时间 %s" % time.ctime())
     print('本次扫描共检测到本网络存在%s台设备' % live_ip)
-    
+
+
 def get_ip():
     '''返回扫描已连接的ipv4'''
     global live_ip_list
     return live_ip_list
+
 
 def remove_ip(list_):
     '''清除已不可用的ip'''
