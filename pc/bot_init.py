@@ -1,7 +1,21 @@
 # 自动连接初始化，创建机器人对象，命令行调用
-
+import threading
 from tcp_user import tcp_user
 from get_bot_ipv4 import get_ip ,scan_ip
+
+def thread_connect(i):
+    global bot_dic, bot_list
+    print('尝试建立连接',i,':',get_ip()[i])
+    try:
+        if get_ip()[i] in bot_dic:
+            pass
+        else:
+            bot_dic[get_ip()[i]] = [tcp_user(get_ip()[i],'yuk2'),'yuk2']
+            bot_dic[get_ip()[i]][0].thread_listen()
+            bot_dic[get_ip()[i]][0].send_pass()
+            print(i,get_ip()[i],'建立成功')
+    except:
+        pass
 
 # 扫描可用ip
 def init():
@@ -11,22 +25,14 @@ def init():
 
     # 生成机器人对象
     bot_dic = {}
+    threads = []
 
-    # 筛选可用连接
+    # 筛选可用连接 并连接
     for i in range(len(get_ip())):
-        print('尝试建立连接',i,':',get_ip()[i])
-        try:
-            if get_ip()[i] in bot_dic:
-                pass
-            else:
-                bot_dic[get_ip()[i]] = [tcp_user(get_ip()[i],'yuk2'),'yuk2']
-                bot_dic[get_ip()[i]][0].thread_listen()
-                bot_dic[get_ip()[i]][0].send_pass()
-                print(i,get_ip()[i],'建立成功')
-        except:
-            print(i,get_ip()[i],'不可用或没有开启TCP服务器')
+        threads.append(threading.Thread(target=thread_connect, args={i, }))
+    for i in threads:
+        i.start()
 
-    print('可用连接:',bot_dic)
 
 def cmd(cmds):
     '''
@@ -60,16 +66,8 @@ def rescan():
     '''排除已连接ip从新扫描'''
     global bot_dic
     scan_ip()
+    threads = []
     for i in range(len(get_ip())):
-        print('尝试建立连接',i,':',get_ip()[i])
-        try:
-            if get_ip()[i] in bot_dic:
-                pass
-            else:
-                bot_dic[get_ip()[i]] = [tcp_user(get_ip()[i],'yuk2'),'yuk2']
-                bot_dic[get_ip()[i]][0].thread_listen()
-                bot_dic[get_ip()[i]][0].send_pass()
-                print(i,get_ip()[i],'建立成功')
-        except:
-            print(i,get_ip()[i],'不可用或没有开启TCP服务器')
-    print('可用连接:',bot_dic)
+        threads.append(threading.Thread(target=thread_connect, args={i, }))
+    for i in threads:
+        i.start()
