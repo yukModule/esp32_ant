@@ -33,16 +33,15 @@ class cmd:
 
     def allocation_cmd(self):
         '''判断并分类指令'''
-        if self.cmd_list[0][0] == '/':
-            for i in range(len(CMD_CLASS)):
-                if CMD_CLASS[i] == self.cmd_list[0]:
-                    try:
-                        self.CMD_RUN[i]() # 调用指定命令
-                    except:
-                        send2wifi('cmd error')
-                    return True
-        else:
+        if self.cmd_list[0][0] != '/':
             return False
+        for i in range(len(CMD_CLASS)):
+            if CMD_CLASS[i] == self.cmd_list[0]:
+                try:
+                    self.CMD_RUN[i]() # 调用指定命令
+                except Exception:
+                    send2wifi('cmd error')
+                return True
     
     def input_(self,s):
         self.split_(s)
@@ -91,7 +90,7 @@ class cmd:
     
     def show(self):
         '''/show # 发送bot信息到udp客户端'''
-        data = 'name:{}\nsleep or wake:{}\ncolor:{}\nteam:{}\n'.format(self.bot_name, self.sleep_or_wake, self.ws2812_color, self.bot_team)
+        data = f'name:{self.bot_name}\nsleep or wake:{self.sleep_or_wake}\ncolor:{self.ws2812_color}\nteam:{self.bot_team}\n'
         send2wifi(data)
     
     def team(self):

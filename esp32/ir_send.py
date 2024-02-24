@@ -6,7 +6,7 @@ ir_pin = Pin(26, Pin.OUT)
 
 def carrier1(t):
     '''高位pwm 38kHz'''
-    for i in range(t):
+    for _ in range(t):
         ir_pin.on()
         sleep_us(13)
         ir_pin.off()
@@ -29,8 +29,7 @@ def r1():
 def ascii_2_list_bin(s):
     '''ascII转列表型8位二进制'''
     b = '{:08b}'.format(ord(s))
-    l = [ int(b[_]) for _ in range(8)]
-    return l
+    return [ int(b[_]) for _ in range(8)]
 
 def emit_ir(code):
     '''报文格式：
