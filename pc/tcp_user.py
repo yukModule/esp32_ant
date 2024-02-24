@@ -1,5 +1,6 @@
 # 机器人对象，多线程收发处理
 
+import contextlib
 import socket
 from threading import Thread
 from time import sleep
@@ -21,15 +22,12 @@ class tcp_user:
         self.ip = ip
         self.bot_aruco_id = '[8]'
         self.bot_team = ''
-        pass
 
     def send_data(self,data):
         '''发送数据'''
         send_data = data.encode(encoding='utf-8')
-        try:
+        with contextlib.suppress(Exception):
             self.tcp_client.send(send_data)
-        except:
-            pass
     
     def listen_(self):
         '''循环监听'''
@@ -44,9 +42,9 @@ class tcp_user:
                     self.bot_aruco_id = infor[1]
                     self.bot_name = infor[2]
                     self.bot_team = infor[3]
-                
+
                 print(self.bot_name,':', bot_say)
-            except:
+            except Exception:
                 print('监听超时--连接中断')
                 remove_ip(self.ip) # 清除断掉的ip
                 bot_init_s.remove_bot_dic(self.ip) # 清除断掉的对象

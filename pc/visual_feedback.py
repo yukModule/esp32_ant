@@ -1,3 +1,4 @@
+import contextlib
 from threading import Thread
 import numpy as np
 import time
@@ -18,7 +19,7 @@ class bot_posture:
         self.y = 0
         self.angle = 0
     
-    def ava_filter(self, x, filt_length):
+    def ava_filter(self, x, filt_length):  # sourcery skip: avoid-builtin-shadow
         '''
         x: 待处理列表
         filt_length: 滑动窗口大小
@@ -38,7 +39,7 @@ class bot_posture:
 
     def denoise(self):
         if len(self.angle_list) >= 10:
-            for i in range(4):
+            for _ in range(4):
                 res = self.ava_filter(self.angle_list, 6)
                 self.angle_list = res
             self.angle = sum(res) / len(res)
@@ -73,7 +74,7 @@ def getpoint():
     global cap, font, dist, newcameramtx, mtx, bot_posture_dic, angle_list
     start = time.time()
     ret, frame = cap.read()
- 
+
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_4X4_250)
     parameters =  aruco.DetectorParameters()
@@ -81,7 +82,7 @@ def getpoint():
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray,aruco_dict,parameters=parameters)
 
     if ids is not None:
- 
+     
         rvec, tvec, _ = aruco.estimatePoseSingleMarkers(corners, 0.05, mtx, dist)
         # 估计每个标记的姿态并返回值rvet和tvec
         (rvec-tvec).any()
@@ -91,24 +92,19 @@ def getpoint():
 
             # 角度估计
             R=np.zeros((3,3),dtype=np.float64)
-            try:
+            with contextlib.suppress(Exception):
                 cv2.Rodrigues(rvec[i, :, :],R)
-            except:
-                pass
             sy=math.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
             singular=sy< 1e-6
 
             ## 滚动
-            if not singular:
-                z = math.atan2(R[1, 0], R[0, 0])
-            else:
-                z = 0
+            z = math.atan2(R[1, 0], R[0, 0]) if not singular else 0
             rz = z * 180.0 / math.pi
-    
+
             if str(ids[i]) not in bot_posture_dic:
                 bot_posture_dic[str(ids[i])] = bot_posture(str(ids[i]))
                 bot_posture_dic[str(ids[i])].angle_list = [rz]
-                
+
             else:
                 bot_posture_dic[str(ids[i])].angle_list.append(rz)
 
@@ -116,26 +112,53 @@ def getpoint():
             bot_posture_dic[str(ids[i])].y = tvec[i, :, :][0][1]
             bot_posture_dic[str(ids[i])].denoise()
 
-            cv2.putText(frame,'deg_z:'+str(rz),(0, 140), font, 0.5, (0, 255, 0), 2, cv2.LINE_AA)
-            
-            # print(i, 'x: ', bot_posture_dic[str(ids[i])].x)
-            # print(i, 'y: ', bot_posture_dic[str(ids[i])].y)
-            # print(i, '角度: ', bot_posture_dic[str(ids[i])].angle)
-            # print(' ')
+            cv2.putText(
+                frame,
+                f'deg_z:{str(rz)}',
+                (0, 140),
+                font,
+                0.5,
+                (0, 255, 0),
+                2,
+                cv2.LINE_AA,
+            )
+                            
+                            # print(i, 'x: ', bot_posture_dic[str(ids[i])].x)
+                            # print(i, 'y: ', bot_posture_dic[str(ids[i])].y)
+                            # print(i, '角度: ', bot_posture_dic[str(ids[i])].angle)
+                            # print(' ')
 
 
         #显示ID，rvec,tvec, 旋转向量和平移向量
-        cv2.putText(frame, "Id: " + str(ids), (10,40), font, 0.5, (0, 0, 255),1,cv2.LINE_AA)
-        cv2.putText(frame, "tvec: " + str(tvec[i, :, :]), (10,80), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.putText(
+            frame,
+            f"Id: {str(ids)}",
+            (10, 40),
+            font,
+            0.5,
+            (0, 0, 255),
+            1,
+            cv2.LINE_AA,
+        )
+        cv2.putText(
+            frame,
+            f"tvec: {str(tvec[i, :, :])}",
+            (10, 80),
+            font,
+            0.5,
+            (0, 0, 255),
+            1,
+            cv2.LINE_AA,
+        )
 
     else:
         cv2.putText(frame, "No Ids", (10,64), font, 1, (0,255,0),2,cv2.LINE_AA)
 
     cv2.imshow("frame",frame)
     cv2.setMouseCallback("frame",get_mouse_point)
- 
+
     key = cv2.waitKey(1)
- 
+
     if key == 27:         # 按esc键退出
         print('esc break...')
         cap.release()

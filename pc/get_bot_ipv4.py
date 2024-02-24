@@ -13,10 +13,7 @@ live_ip_list = []
 
 def get_os():
     os = platform.system()
-    if os == "Windows":
-        return "n"
-    else:
-        return "c"
+    return "n" if os == "Windows" else "c"
 
 
 def ping_ip(ip_str):
@@ -24,8 +21,8 @@ def ping_ip(ip_str):
            "1", ip_str]
     output = os.popen(" ".join(cmd)).readlines()
     for line in output:
-        if str(line).upper().find("TTL") >= 0:
-            print("ip: %s 在线" % ip_str)
+        if "TTL" in str(line).upper():
+            print(f"ip: {ip_str} 在线")
             global live_ip, live_ip_list
             live_ip += 1
             live_ip_list.append(ip_str)
@@ -39,11 +36,9 @@ def find_ip(ip_prefix):
     global ipv4_pc
     threads = []
     for i in range(1, 256):
-        ip = '%s.%s' % (ip_prefix, i)
+        ip = f'{ip_prefix}.{i}'
         if ip!=ipv4_pc:
-            if ip in live_ip_list: # 排除已经建立连接的ip
-                pass
-            else:
+            if ip not in live_ip_list:
                 threads.append(threading.Thread(target=ping_ip, args={ip, }))
     for i in threads:
         i.start()
@@ -63,14 +58,14 @@ def find_local_ip():
 
 def scan_ip():
     global live_ip_list
-    print("开始扫描时间: %s" % time.ctime())
+    print(f"开始扫描时间: {time.ctime()}")
     addr = find_local_ip()
     args = "".join(addr)
     print('本机ip:', args)
     ip_pre = '.'.join(args.split('.')[:-1])
     find_ip(ip_pre)
-    print("扫描结束时间 %s" % time.ctime())
-    print('本次扫描共检测到本网络存在%s台设备' % live_ip)
+    print(f"扫描结束时间 {time.ctime()}")
+    print(f'本次扫描共检测到本网络存在{live_ip}台设备')
 
 
 def get_ip():
