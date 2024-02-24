@@ -5,6 +5,7 @@ from threading import Thread
 from time import sleep
 from get_bot_ipv4 import remove_ip
 import bot_init as bot_init_s  # 防止循环调用
+from visual_feedback import get_bot_posture
 
 class tcp_user:
     def __init__(self,ip,bot_name):
@@ -18,6 +19,7 @@ class tcp_user:
         self.tcp_client.connect((ip,7788))
         self.bot_name = bot_name
         self.ip = ip
+        self.bot_aruco_id = '[8]'
         pass
 
     def send_data(self,data):
@@ -33,17 +35,26 @@ class tcp_user:
         while True:
             try:
                 recv_data = self.tcp_client.recv(1024)
-                print(self.bot_name,':', recv_data.decode(encoding = 'utf-8'))
+                bot_say = recv_data.decode(encoding = 'utf-8')
+                print(self.bot_name,':', bot_say)
+                if bot_say[:3] == '/id':
+                    self.bot_aruco_id = bot_say[3:]
             except:
                 print('监听超时--连接中断')
                 remove_ip(self.ip) # 清除断掉的ip
                 bot_init_s.remove_bot_dic(self.ip) # 清除断掉的对象
                 break
-
+    
     def thread_listen(self):
         '''开启多线程监听'''
         t1 = Thread(target=self.listen_)
         t1.start()
+    
+    def get_posture(self):
+        '''通过视觉获取位姿'''
+        dic = get_bot_posture()
+        if self.bot_aruco_id in dic:
+            return [dic[self.bot_aruco_id].x, dic[self.bot_aruco_id].y, dic[self.bot_aruco_id].angle]
 
     def send_pass(self):
         '''防esp32看门狗'''

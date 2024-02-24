@@ -134,9 +134,8 @@ bot_name yuk2
 team blue
 
 ```
-5. pc段python库
-   1. pip install opencv-contrib-python==4.7.0.72 -i https://pypi.tuna.tsinghua.edu.cn/simple --verbose
-6. 相机标定
+
+5. 相机标定
    1. https://blog.csdn.net/sunnyrainflower/article/details/131112182
 
 ### 程序文件功能概述
@@ -171,8 +170,11 @@ team blue
 - `/randomcolor`  随机ws2812的颜色一次
 
 ### PC端启动
-- 运行pc文件下的main.py
-- 确保机器人连接的是pc电脑开启的热点
+- 相机标定
+  - 运行 `拍照.bat` 用不同的视角拍摄棋盘，数量越多越准确
+  - 运行 `相机标定.bat` 通过拍照所得的图片生成相机标定文件
+- 运行客户端 `客户端.bat`
+- 确保机器人连接的WiFi是本机电脑开启的
 - 运行后自动连接
 
 ### PC客户端指令

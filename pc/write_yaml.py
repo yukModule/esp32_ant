@@ -1,3 +1,5 @@
+# 生成相机标定文件
+
 import cv2
 import numpy as np
 import glob
@@ -13,13 +15,13 @@ h = 5  # 7  - 1
 objp = np.zeros((w * h, 3), np.float32)
 objp[:, :2] = np.mgrid[0:w, 0:h].T.reshape(-1, 2)
 objp = objp * 14.5  # 实际方格边长 mm
- 
+
 # 储存棋盘格角点的世界坐标和图像坐标对
 objpoints = []  # 在世界坐标系中的三维点
 imgpoints = []  # 在图像平面的二维点
 # 加载pic文件夹下所有的jpg图像
 images = glob.glob('pc/images/*.jpg')  # 拍摄的十几张棋盘图片所在目录
- 
+
 i = 0
 for fname in images:
  
@@ -47,7 +49,7 @@ for fname in images:
         cv2.imshow('findCorners', img)
         cv2.waitKey(200)
 cv2.destroyAllWindows()
-# %% 标定
+
 print('正在计算')
 print(u, v)
 # 标定
@@ -56,7 +58,7 @@ ret, mtx, dist, rvecs, tvecs = \
  
 # 写入文件
 ###写入文件路径###
-file_path = ("./标定文件.yaml")
+file_path = ("pc/标定文件.yaml")
 ###写入文件路径###
  
 # 存取标定数据
@@ -76,3 +78,4 @@ print("tvecs平移（向量）外参:\n", tvecs)  # 平移向量  # 外参数
 newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (u, v), 0, (u, v))
 print('newcameramtx外参', newcameramtx)
 print("写入文件名称:", file_path)
+print('保存完毕')
