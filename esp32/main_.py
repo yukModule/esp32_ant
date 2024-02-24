@@ -13,6 +13,7 @@ port = 7788  # 端口号
 wlan = None  # wlan
 listenSocket = None  # 套接字
 ret, conn = None, None
+first_send = 1
 CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/move', '/sleep', '/setcolor', '/name', '/show', '/team', '/randomcolor']
 
 class cmd:
@@ -133,11 +134,21 @@ def send2wifi(data):
     global ret, conn
     ret = conn.send(data)
 
+def first_send_date():
+    '''发送bot信息'''
+    sleep(0.5)
+    send2wifi('/infor' 
+              +' '+ get_config_var()['aruco_id']
+              +' '+ get_config_var()['bot_name']
+              +' '+ get_config_var()['team'])
+
+
+
 creat_bot(get_config_var()['bot_name'], get_config_var()['team'])
 
 def creat_server():
     '''建立TCP服务器'''
-    global ret, conn, listenSocket, wlan, port
+    global ret, conn, listenSocket, wlan, port, first_send
     connectWifi(SSID,PASSWORD)
     ip = wlan.ifconfig()[0]   #获取IP地址
     listenSocket = socket.socket()   #创建套接字
@@ -153,6 +164,11 @@ def creat_server():
 
         while True:
             data = conn.recv(1024)   #接收数据（1024字节大小）
+
+            if first_send:
+                first_send_date()
+                first_send = 0
+
             if(len(data) == 0):   #判断客户端是否断开连接
                 print("close socket")
                 conn.close()   #关闭套接字

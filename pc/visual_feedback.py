@@ -6,12 +6,13 @@ import cv2.aruco as aruco
 import math
 import yaml
 
-bot_posture_dic = {}
+bot_posture_dic = {} # {'[8]':bot_posture([8]), }
 Point = []
 
 class bot_posture:
+    '''滑动均值滤波 保存位姿'''
     def __init__(self,id):
-        self.str_id = id
+        self.aruco_id = id
         self.angle_list = []
         self.x = 0
         self.y = 0
@@ -68,8 +69,8 @@ def get_mouse_point(event,x,y,flags,param):  #鼠标点击位置
         Point = []
 
 def getpoint():
+    '''通过机器视觉 获取aruco码的位姿'''
     global cap, font, dist, newcameramtx, mtx, bot_posture_dic, angle_list
-
     start = time.time()
     ret, frame = cap.read()
  
@@ -79,12 +80,11 @@ def getpoint():
 
     corners, ids, rejectedImgPoints = aruco.detectMarkers(gray,aruco_dict,parameters=parameters)
 
-#    if ids != None:
     if ids is not None:
  
         rvec, tvec, _ = aruco.estimatePoseSingleMarkers(corners, 0.05, mtx, dist)
-        # 估计每个标记的姿态并返回值rvet和tvec ---不同
-        (rvec-tvec).any() # get rid of that nasty numpy value array error
+        # 估计每个标记的姿态并返回值rvet和tvec
+        (rvec-tvec).any()
         for i in range(rvec.shape[0]):
             cv2.drawFrameAxes(frame, mtx, dist, rvec[i, :, :], tvec[i, :, :], 0.03) #绘制轴
             aruco.drawDetectedMarkers(frame, corners) #在标记周围画一个正方形
@@ -104,7 +104,6 @@ def getpoint():
             else:
                 z = 0
             rz = z * 180.0 / math.pi
-            # print("滚动",rz)
     
             if str(ids[i]) not in bot_posture_dic:
                 bot_posture_dic[str(ids[i])] = bot_posture(str(ids[i]))
@@ -117,7 +116,7 @@ def getpoint():
             bot_posture_dic[str(ids[i])].y = tvec[i, :, :][0][1]
             bot_posture_dic[str(ids[i])].denoise()
 
-            cv2.putText(frame,'deg_z:'+str(rz),(0, 140), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+            cv2.putText(frame,'deg_z:'+str(rz),(0, 140), font, 0.5, (0, 255, 0), 2, cv2.LINE_AA)
             
             # print(i, 'x: ', bot_posture_dic[str(ids[i])].x)
             # print(i, 'y: ', bot_posture_dic[str(ids[i])].y)
@@ -131,10 +130,7 @@ def getpoint():
 
     else:
         cv2.putText(frame, "No Ids", (10,64), font, 1, (0,255,0),2,cv2.LINE_AA)
- 
 
-    # 计算帧率并显示
-    #cv2.putText(frame, "rate: " + str(1 / (end-start )), (10, 120), font, 0.5, (0, 0, 255), 1, cv2.LINE_AA)
     cv2.imshow("frame",frame)
     cv2.setMouseCallback("frame",get_mouse_point)
  
@@ -151,10 +147,8 @@ def get_bot_posture():
     global bot_posture_dic
     return bot_posture_dic
 
-
 def task_open_vf():
     '''多线程开启视觉反馈'''
-
     def open_vf():
         while True:
             getpoint()

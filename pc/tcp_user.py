@@ -20,6 +20,7 @@ class tcp_user:
         self.bot_name = bot_name
         self.ip = ip
         self.bot_aruco_id = '[8]'
+        self.bot_team = ''
         pass
 
     def send_data(self,data):
@@ -36,9 +37,15 @@ class tcp_user:
             try:
                 recv_data = self.tcp_client.recv(1024)
                 bot_say = recv_data.decode(encoding = 'utf-8')
+
+                if bot_say[:6] == '/infor': 
+                    # 设置来自机器人发送的信息
+                    infor = bot_say.split()
+                    self.bot_aruco_id = infor[1]
+                    self.bot_name = infor[2]
+                    self.bot_team = infor[3]
+                
                 print(self.bot_name,':', bot_say)
-                if bot_say[:3] == '/id':
-                    self.bot_aruco_id = bot_say[3:]
             except:
                 print('监听超时--连接中断')
                 remove_ip(self.ip) # 清除断掉的ip
