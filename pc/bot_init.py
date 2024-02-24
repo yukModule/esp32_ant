@@ -1,4 +1,5 @@
 # 自动连接初始化，创建机器人对象，命令行调用
+import contextlib
 import threading
 from tcp_user import tcp_user
 from get_bot_ipv4 import get_ip ,scan_ip
@@ -9,16 +10,12 @@ id_ip_dic = {} #机器人ID对应IP
 def thread_connect(i):
     global bot_dic, bot_list
     print('尝试建立连接',i,':',get_ip()[i])
-    try:
-        if get_ip()[i] in bot_dic:
-            pass
-        else:
+    with contextlib.suppress(Exception):
+        if get_ip()[i] not in bot_dic:
             bot_dic[get_ip()[i]] = [tcp_user(get_ip()[i],'yuk2'),'yuk2']
             bot_dic[get_ip()[i]][0].thread_listen()
             bot_dic[get_ip()[i]][0].send_pass()
             print(i,get_ip()[i],'建立成功')
-    except:
-        pass
 
 # 扫描可用ip
 def init():
@@ -28,11 +25,15 @@ def init():
 
     # 生成机器人对象
     bot_dic = {}
-    threads = []
-
-    # 筛选可用连接 并连接
-    for i in range(len(get_ip())):
-        threads.append(threading.Thread(target=thread_connect, args={i, }))
+    threads = [
+        threading.Thread(
+            target=thread_connect,
+            args={
+                i,
+            },
+        )
+        for i in range(len(get_ip()))
+    ]
     for i in threads:
         i.start()
 
@@ -65,18 +66,18 @@ def cmd(cmds):
     '''
     global bot_dic, cmd_list
     CMD_RUN = [rescan, liveip, send]
-    CMD_CLASS = ['/rescan', '/liveip', '/send']
     binding_ip_id()
 
     cmd_list = cmds.split()
 
     if cmd_list[0][0] == '/':
+        CMD_CLASS = ['/rescan', '/liveip', '/send']
         for i in range(len(CMD_CLASS)):
-                if CMD_CLASS[i] == cmd_list[0]:
-                    try:
-                        CMD_RUN[i]() # 调用指定命令
-                    except:
-                        print('不存在该指令 或 语法错误')
+            if CMD_CLASS[i] == cmd_list[0]:
+                try:
+                    CMD_RUN[i]() # 调用指定命令
+                except Exception:
+                    print('不存在该指令 或 语法错误')
 
 def remove_bot_dic(dic_ip):
     '''移除bot对象'''
@@ -88,9 +89,15 @@ def rescan():
     '''排除已连接ip从新扫描'''
     global bot_dic
     scan_ip()
-    threads = []
-    for i in range(len(get_ip())):
-        threads.append(threading.Thread(target=thread_connect, args={i, }))
+    threads = [
+        threading.Thread(
+            target=thread_connect,
+            args={
+                i,
+            },
+        )
+        for i in range(len(get_ip()))
+    ]
     for i in threads:
         i.start()
 
