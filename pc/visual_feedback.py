@@ -60,15 +60,6 @@ with open(file_path, "r") as file:
 cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
 font = cv2.FONT_HERSHEY_SIMPLEX #font for displaying text (below)
 
-def get_mouse_point(event,x,y,flags,param):  #鼠标点击位置
-    global Point
-    if event==cv2.EVENT_LBUTTONDOWN:
-        print("Point is",x,y)
-        Point.append((x,y))
-        print(Point)
-    if event==cv2.EVENT_RBUTTONDOWN:
-        Point = []
-
 def getpoint():
     '''通过机器视觉 获取aruco码的位姿'''
     global cap, font, dist, newcameramtx, mtx, bot_posture_dic, angle_list
@@ -108,27 +99,14 @@ def getpoint():
             else:
                 bot_posture_dic[str(ids[i])].angle_list.append(rz)
 
-            bot_posture_dic[str(ids[i])].x = tvec[i, :, :][0][0]
-            bot_posture_dic[str(ids[i])].y = tvec[i, :, :][0][1]
+            x = tvec[i, :, :][0][0] * 100
+            y = tvec[i, :, :][0][1] * 100
+
+            bot_posture_dic[str(ids[i])].x = x
+            bot_posture_dic[str(ids[i])].y = y
             bot_posture_dic[str(ids[i])].denoise()
 
-            cv2.putText(
-                frame,
-                f'deg_z:{str(rz)}',
-                (0, 140),
-                font,
-                0.5,
-                (0, 255, 0),
-                2,
-                cv2.LINE_AA,
-            )
-                            
-                            # print(i, 'x: ', bot_posture_dic[str(ids[i])].x)
-                            # print(i, 'y: ', bot_posture_dic[str(ids[i])].y)
-                            # print(i, '角度: ', bot_posture_dic[str(ids[i])].angle)
-                            # print(' ')
-
-
+            
         #显示ID，rvec,tvec, 旋转向量和平移向量
         cv2.putText(
             frame,
@@ -142,8 +120,28 @@ def getpoint():
         )
         cv2.putText(
             frame,
-            f"tvec: {str(tvec[i, :, :])}",
+            "x: {:.2f}".format(x),
+            (10, 60),
+            font,
+            0.5,
+            (0, 0, 255),
+            1,
+            cv2.LINE_AA,
+        )
+        cv2.putText(
+            frame,
+            "y: {:.2f}".format(y),
             (10, 80),
+            font,
+            0.5,
+            (0, 0, 255),
+            1,
+            cv2.LINE_AA,
+        )
+        cv2.putText(
+            frame,
+            "angle: {:.2f}".format(rz),
+            (10, 100),
             font,
             0.5,
             (0, 0, 255),
@@ -155,7 +153,6 @@ def getpoint():
         cv2.putText(frame, "No Ids", (10,64), font, 1, (0,255,0),2,cv2.LINE_AA)
 
     cv2.imshow("frame",frame)
-    cv2.setMouseCallback("frame",get_mouse_point)
 
     key = cv2.waitKey(1)
 
