@@ -8,6 +8,9 @@
 - [kilobot-超赞的集群机器人 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/439647295)
 - [GPIO模拟时序控制外设4——红外发射管-CSDN博客](https://blog.csdn.net/qq_41954556/article/details/131414915)
 
+![预览](/img/正面.png)
+![预览](/img/背面.png)
+
 ## 介绍
 **项目**概述: 
 - 应用场景
