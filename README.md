@@ -4,7 +4,6 @@
 - [振动驱动的微型机器人非完整约束补偿的定位方法 (engineering.org.cn)](https://www.engineering.org.cn/ch/article/16557/detail)
 - [NN机器人--微型视觉控制振动机器人 - 嘉立创EDA开源硬件平台 (oshwhub.com)](https://oshwhub.com/shukkkk/zhen-dong-ji-qi-ren_copy_copy_copy)
 - [【ESP32最全学习笔记（基础篇）——4.ESP32 引脚介绍】「已注销」的博客-CSDN博客](https://blog.csdn.net/m0_46509684/article/details/129105888)
-- [MicroPython for ESP32 多线程问题及解决方案 - 哔哩哔哩 (bilibili.com)](https://www.bilibili.com/read/cv16282686/)
 - [kilobot-超赞的集群机器人 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/439647295)
 - [GPIO模拟时序控制外设4——红外发射管-CSDN博客](https://blog.csdn.net/qq_41954556/article/details/131414915)
 
