@@ -1,7 +1,7 @@
 # 按j保存一张图片
 
 import cv2
-camera=cv2.VideoCapture(0)
+camera=cv2.VideoCapture(1)
  
 cv2.namedWindow('imgage', cv2.WINDOW_FREERATIO)
 i = -1

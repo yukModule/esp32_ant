@@ -57,7 +57,7 @@ with open(file_path, "r") as file:
     dist = np.array(dist)
 
 #打开笔记本摄像头
-cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(1,cv2.CAP_DSHOW)
 font = cv2.FONT_HERSHEY_SIMPLEX #font for displaying text (below)
 
 def getpoint():
