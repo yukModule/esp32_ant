@@ -109,6 +109,8 @@ def getpoint():
             ## 滚动
             z = math.atan2(R[1, 0], R[0, 0]) if not singular else 0
             rz = -1 * z * 180.0 / math.pi + 90
+            if rz>180:
+                rz = rz - 360
             x = tvec[i, :, :][0][0] * 100
             y = -1 * tvec[i, :, :][0][1] * 100
 

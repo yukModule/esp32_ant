@@ -48,7 +48,9 @@ def liveip():
     print('可用连接:',bot_dic)
 
 def send():
-    '''/send [8] 233'''
+    '''
+    cmd_list : /send [8] 233
+    '''
     global cmd_list, bot_dic, id_ip_dic
     ip = id_ip_dic[cmd_list[1]]
     date = ''
@@ -59,6 +61,7 @@ def send():
         bot_dic[ip][0].send_data(date)
 
 def binding_ip_id():
+    '''使机器人id与ip一一对应'''
     global bot_dic, id_ip_dic
     for i in bot_dic:
         id_ip_dic[ bot_dic[i][0].bot_aruco_id ] = i
@@ -68,34 +71,50 @@ def line():
     cmd_list : /line [8] x y
     '''
     global cmd_list, bot_dic, id_ip_dic
-    ip = id_ip_dic[cmd_list[1]]
     
     goal_x = float(cmd_list[2])
     goal_y = float(cmd_list[3])
 
-    line_task = threading.Thread(target=control.line_move, args=(goal_x, goal_y, cmd_list[1]))
+    line_task = threading.Thread(target=control.line_move, args=(goal_x, goal_y, cmd_list[1], cmd_list[4], cmd_list[5]))
     line_task.start()
     print('线程line指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
 
+def rot():
+    '''
+    cmd_list : /rot [8] a c
+    '''
+    global cmd_list, bot_dic, id_ip_dic
+    line_task = threading.Thread(target=control.rot_move, args=(cmd_list[1], cmd_list[2], cmd_list[3]))
+    line_task.start()
+    print('线程line指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
 
+def rotp():
+    '''
+    cmd_list : /rotp [8] x y c
+    '''
+    global cmd_list, bot_dic, id_ip_dic
+    line_task = threading.Thread(target=control.rotp_move, args=(cmd_list[1], cmd_list[2], cmd_list[3], cmd_list[4]))
+    line_task.start()
+    print('线程line指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
 
 def cmd(cmds):
     '''
     拆分字符,定向发送
     - /liveip 查看当前已经建立的连接
     - /rescan 从新扫描并建立新的连接
-    - /send [8] /wryyyyy 向 机器人[8] 发送 /wryyyyy
-    - /line [8] x y 令 机器人[8] 沿直线运动到(x,y)
+    - /send [8] /show 向 机器人[8] 发送 /show
+    - /line [8] x y a r 令 机器人[8] 沿直线运动到(x,y) 角度容许误差为a 目标半径为r
     - /arc [9] x0 y0 x1 y1 令 机器人[8] 以(x0,y0)为圆心 短弧为轨迹 运动到 (x1,y1)
+    - /rot [8] a c 令 机器人[8] 旋转到角度a 容许角度误差为c
     '''
     global bot_dic, cmd_list
-    CMD_RUN = [rescan, liveip, send, line]
+    CMD_RUN = [rescan, liveip, send, line, rot]
     binding_ip_id()
 
     cmd_list = cmds.split()
 
     if cmd_list[0][0] == '/':
-        CMD_CLASS = ['/rescan', '/liveip', '/send', '/line']
+        CMD_CLASS = ['/rescan', '/liveip', '/send', '/line', '/rot']
         for i in range(len(CMD_CLASS)):
             if CMD_CLASS[i] == cmd_list[0]:
                 try:

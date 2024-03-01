@@ -14,15 +14,14 @@ wlan = None  # wlan
 listenSocket = None  # 套接字
 ret, conn = None, None
 first_send = 1
-CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/m', '/sleep', '/setcolor', '/name', '/show', '/team', '/randomcolor']
+CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/m', '/setcolor', '/name', '/show', '/team']
 
 class cmd:
     '''命令行接口'''
     
     def __init__(self):
         self.cmd_list = []
-        self.CMD_RUN = [self.connect, self.say2wifi, self.say2inf, self.move, self.sleep, self.setcolor, self.name, self.show, self.team, self.randomcolor]
-        self.sleep_or_wake = 'wake'
+        self.CMD_RUN = [self.connect, self.say2wifi, self.say2inf, self.move, self.setcolor, self.name, self.show, self.team]
         self.ws2812_color = ['0', '0', '0']
         self.bot_name = 'Ant'
         self.bot_team = 'A'
@@ -70,11 +69,6 @@ class cmd:
         if self.sleep_or_wake == 'wake':
             control.set_motor(self.cmd_list[1], self.cmd_list[2])
 
-    def sleep(self):
-        '''/sleep <sleep/wake> # sleep停止运动且不在执行/move指令'''
-        self.sleep_or_wake = self.cmd_list[1]
-        if self.cmd_list[1] == 'sleep':
-            control.set_motor('0', '0')
     
     def setcolor(self):
         '''/setcolor <r> <g> <b> # 设置ws2812颜色'''
@@ -99,9 +93,6 @@ class cmd:
         config_dict['team'] = self.cmd_list[1]
         save_()
 
-    def randomcolor(self):
-        '''/randomcolor # 随机颜色'''
-        WS2812.random_color()
 
 bot = cmd() # 创建机器人命令处理
 
