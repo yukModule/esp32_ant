@@ -33,7 +33,7 @@ def line_move(x,y,bot_id):
     now_x, now_y, now_angle = goal_now_posture(bot_id)
     motor_R_l, motor_L_l = 0, 0
     while allowable_error(now_x, now_y, x, y, 2): #如果不在目标范围内 则执行
-        now_x, now_y, now_angle = goal_now_posture(bot_id)
+        now_x, now_y, now_angle = goal_now_posture(bot_id) # 通过视觉获取机器人当前坐标
         angle_err = get_angle(x, y, now_x, now_y) - now_angle + 180# 获取角度偏差
         show_err(angle_err, now_x, now_y) # 在相机上显示
 
@@ -48,7 +48,7 @@ def line_move(x,y,bot_id):
             motor_R = 500
             motor_L = 500
 
-        # 减轻服务器负担，只有与上一次数据不同时才发送
+        # 减轻服务器负担，提高相应速度，只有与上一次数据不同时才发送
         if motor_R != motor_R_l or motor_L != motor_L_l: 
             with contextlib.suppress(Exception): # 尝试发送
                 trim_cmd_and_send(motor_L, motor_R, bot_id)
