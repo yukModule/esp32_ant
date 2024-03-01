@@ -1,7 +1,7 @@
 main on
 wifi on
-PASSWORD abc123123abc1237
-SSID mkm_iqoowifi
+PASSWORD 66666666pi
+SSID MKM_PRO8
 bot_name yuk2
 team blue
 aruco_id [8]

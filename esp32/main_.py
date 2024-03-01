@@ -14,7 +14,7 @@ wlan = None  # wlan
 listenSocket = None  # 套接字
 ret, conn = None, None
 first_send = 1
-CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/move', '/sleep', '/setcolor', '/name', '/show', '/team', '/randomcolor']
+CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/m', '/sleep', '/setcolor', '/name', '/show', '/team', '/randomcolor']
 
 class cmd:
     '''命令行接口'''
@@ -66,7 +66,7 @@ class cmd:
         print(self.cmd_list[1])
     
     def move(self):
-        '''/move <左电机pwm> <右电机pwm> # 控制电机转速'''
+        '''/m <左电机pwm> <右电机pwm> # 控制电机转速'''
         if self.sleep_or_wake == 'wake':
             control.set_motor(self.cmd_list[1], self.cmd_list[2])
 
@@ -176,7 +176,6 @@ def creat_server():
             recv_data_str = data.decode("utf-8")
             if bot.input_(recv_data_str) is False:  # 判断是否为简单运动指令
                 control.easy_move(recv_data_str)
-            send2wifi(data)   #发送数据
 
 if __name__=="__main__":
     if get_config_var()['wifi'] == 'on': #开启TCP线程
@@ -184,6 +183,6 @@ if __name__=="__main__":
     
     while get_config_var()['main'] == 'on': #任务分配，进入core1 防止看门狗重启
         sleep(1)
-        print('feed')
+
 
 

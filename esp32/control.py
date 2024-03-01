@@ -22,5 +22,5 @@ def easy_move(s):
 
 def set_motor(pwmL,pwmR):
     global ML, MR
-    MR.duty(int(pwmL))
-    ML.duty(int(pwmR))
+    MR.duty(int(pwmR))
+    ML.duty(int(pwmL))

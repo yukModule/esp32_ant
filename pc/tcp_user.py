@@ -42,6 +42,7 @@ class tcp_user:
                     self.bot_aruco_id = infor[1]
                     self.bot_name = infor[2]
                     self.bot_team = infor[3]
+                    print(self.bot_aruco_id, '已经绑定制', self.ip)
 
                 print(self.bot_name,':', bot_say)
             except Exception:
@@ -66,7 +67,7 @@ class tcp_user:
         def sthread_pass():
             while True:
                 self.send_data('pass')
-                sleep(2)
+                sleep(10)
 
         t2 = Thread(target=sthread_pass)
         t2.start()

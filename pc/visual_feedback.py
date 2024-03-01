@@ -15,6 +15,8 @@ class bot_posture:
     def __init__(self,id):
         self.aruco_id = id
         self.angle_list = []
+        self.x_list = []
+        self.y_list = []
         self.x = 0
         self.y = 0
         self.angle = 0
@@ -44,6 +46,22 @@ class bot_posture:
                 self.angle_list = res
             self.angle = sum(res) / len(res)
             self.angle_list.pop(0)
+    
+    def denoise_x(self):
+        if len(self.x_list) >= 10:
+            for _ in range(4):
+                res = self.ava_filter(self.x_list, 6)
+                self.x_list = res
+            self.x = sum(res) / len(res)
+            self.x_list.pop(0)
+    
+    def denoise_y(self):
+        if len(self.y_list) >= 10:
+            for _ in range(4):
+                res = self.ava_filter(self.y_list, 6)
+                self.y_list = res
+            self.y = sum(res) / len(res)
+            self.y_list.pop(0)
 
 # 加载相机标定
 file_path = ("pc/标定文件.yaml")
@@ -62,7 +80,7 @@ font = cv2.FONT_HERSHEY_SIMPLEX #font for displaying text (below)
 
 def getpoint():
     '''通过机器视觉 获取aruco码的位姿'''
-    global cap, font, dist, newcameramtx, mtx, bot_posture_dic, angle_list
+    global cap, font, dist, newcameramtx, mtx, bot_posture_dic, angle_list, frame
     start = time.time()
     ret, frame = cap.read()
 
@@ -78,7 +96,7 @@ def getpoint():
         # 估计每个标记的姿态并返回值rvet和tvec
         (rvec-tvec).any()
         for i in range(rvec.shape[0]):
-            cv2.drawFrameAxes(frame, mtx, dist, rvec[i, :, :], tvec[i, :, :], 0.03) #绘制轴
+            # cv2.drawFrameAxes(frame, mtx, dist, rvec[i, :, :], tvec[i, :, :], 0.03) #绘制轴
             aruco.drawDetectedMarkers(frame, corners) #在标记周围画一个正方形
 
             # 角度估计
@@ -90,20 +108,25 @@ def getpoint():
 
             ## 滚动
             z = math.atan2(R[1, 0], R[0, 0]) if not singular else 0
-            rz = z * 180.0 / math.pi
+            rz = -1 * z * 180.0 / math.pi + 90
+            x = tvec[i, :, :][0][0] * 100
+            y = -1 * tvec[i, :, :][0][1] * 100
 
             if str(ids[i]) not in bot_posture_dic:
                 bot_posture_dic[str(ids[i])] = bot_posture(str(ids[i]))
                 bot_posture_dic[str(ids[i])].angle_list = [rz]
+                bot_posture_dic[str(ids[i])].x_list = [x]
+                bot_posture_dic[str(ids[i])].y_list = [y]
 
             else:
                 bot_posture_dic[str(ids[i])].angle_list.append(rz)
+                bot_posture_dic[str(ids[i])].x_list.append(x)
+                bot_posture_dic[str(ids[i])].y_list.append(y)
 
-            x = tvec[i, :, :][0][0] * 100
-            y = tvec[i, :, :][0][1] * 100
+            
 
-            bot_posture_dic[str(ids[i])].x = x
-            bot_posture_dic[str(ids[i])].y = y
+            bot_posture_dic[str(ids[i])].denoise_x()
+            bot_posture_dic[str(ids[i])].denoise_y()
             bot_posture_dic[str(ids[i])].denoise()
 
             
@@ -164,7 +187,7 @@ def getpoint():
     return
 
 def get_bot_posture():
-    global bot_posture_dic
+    global bot_posture_dic # ={'[8]':class}
     return bot_posture_dic
 
 def task_open_vf():
@@ -174,3 +197,27 @@ def task_open_vf():
             getpoint()
     task = Thread(target=open_vf)
     task.start()
+
+def show_err(err, x, y):
+    '''在屏幕上显示角度误差与当前位置'''
+    global frame, font
+    cv2.putText(
+        frame,
+        "angle error: {:.2f}".format(err),
+        (10, 120),
+        font,
+        0.5,
+        (255, 0, 0),
+        1,
+        cv2.LINE_AA,
+    )
+    cv2.putText(
+        frame,
+        "bot: ({:.2f}, {:.2f})".format(x, y),
+        (10, 140),
+        font,
+        0.5,
+        (255, 0, 0),
+        1,
+        cv2.LINE_AA,
+    )

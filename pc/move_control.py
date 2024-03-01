@@ -1,0 +1,61 @@
+from visual_feedback import get_bot_posture, show_err
+import bot_init as bot_
+import contextlib
+import math
+from time import sleep
+
+def trim_cmd_and_send(motor_L,motor_R,bot_id):
+    '''
+    电机pwm 整理并发送
+    /move motor_L motor_R
+    '''
+    bot_.set_cmdlist(['/send', bot_id, '/m', str(motor_L), str(motor_R)]) 
+    bot_.send()
+
+def get_angle(x1, y1, x2, y2):
+    '''获取从当前点到目标点的向量角度'''
+    return math.atan2((y2-y1),(x2-x1)) / math.pi * 180
+
+def goal_now_posture(bot_id):
+    '''获取当前位姿'''
+    dic = get_bot_posture()
+    now_x = dic[bot_id].x
+    now_y = dic[bot_id].y
+    now_angle = dic[bot_id].angle
+    return now_x, now_y, now_angle
+
+def allowable_error(x1, y1, x2, y2, al_er):
+    '''是否到达目标点位'''
+    return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) > al_er*al_er
+
+def line_move(x,y,bot_id):
+    '''直线运动到目标点'''
+    now_x, now_y, now_angle = goal_now_posture(bot_id)
+    motor_R_l, motor_L_l = 0, 0
+    while allowable_error(now_x, now_y, x, y, 2): #如果不在目标范围内 则执行
+        now_x, now_y, now_angle = goal_now_posture(bot_id)
+        angle_err = get_angle(x, y, now_x, now_y) - now_angle + 180# 获取角度偏差
+        show_err(angle_err, now_x, now_y) # 在相机上显示
+
+        # 使机器人朝向始终指向目标点
+        if angle_err<-8 : 
+            motor_L = 500
+            motor_R = 0
+        elif angle_err>8 :
+            motor_L = 0
+            motor_R = 500
+        else:
+            motor_R = 500
+            motor_L = 500
+
+        # 减轻服务器负担，只有与上一次数据不同时才发送
+        if motor_R != motor_R_l or motor_L != motor_L_l: 
+            with contextlib.suppress(Exception): # 尝试发送
+                trim_cmd_and_send(motor_L, motor_R, bot_id)
+            motor_R_l = motor_R
+            motor_L_l = motor_L
+            sleep(0.1) # 等待机器人TCP中断处理
+
+    sleep(0.1)
+    trim_cmd_and_send(0, 0, bot_id)
+    print(bot_id, '已到达', x, y)
