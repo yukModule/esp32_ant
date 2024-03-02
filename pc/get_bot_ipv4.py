@@ -37,14 +37,12 @@ def find_ip(ip_prefix):
     threads = []
     for i in range(1, 256):
         ip = f'{ip_prefix}.{i}'
-        if ip!=ipv4_pc:
-            if ip not in live_ip_list:
-                threads.append(threading.Thread(target=ping_ip, args={ip, }))
+        if ip!=ipv4_pc and ip not in live_ip_list:
+            threads.append(threading.Thread(target=ping_ip, args={ip, }))
     for i in threads:
         i.start()
     for i in threads:
         i.join()
-
 
 def find_local_ip():
     """

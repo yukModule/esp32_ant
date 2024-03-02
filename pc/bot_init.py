@@ -93,7 +93,7 @@ def rotp():
     cmd_list : /rotp [8] x y c
     '''
     global cmd_list, bot_dic, id_ip_dic
-    line_task = threading.Thread(target=control.rotp_move, args=(cmd_list[1], cmd_list[2], cmd_list[3], cmd_list[4]))
+    line_task = threading.Thread(target=control.rotp_move, args=(cmd_list[1], float(cmd_list[2]), float(cmd_list[3]), float(cmd_list[4])))
     line_task.start()
     print('线程line指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
 
@@ -108,13 +108,13 @@ def cmd(cmds):
     - /rot [8] a c 令 机器人[8] 旋转到角度a 容许角度误差为c
     '''
     global bot_dic, cmd_list
-    CMD_RUN = [rescan, liveip, send, line, rot]
+    CMD_RUN = [rescan, liveip, send, line, rot, rotp]
     binding_ip_id()
 
     cmd_list = cmds.split()
 
     if cmd_list[0][0] == '/':
-        CMD_CLASS = ['/rescan', '/liveip', '/send', '/line', '/rot']
+        CMD_CLASS = ['/rescan', '/liveip', '/send', '/line', '/rot', '/rotp']
         for i in range(len(CMD_CLASS)):
             if CMD_CLASS[i] == cmd_list[0]:
                 try:

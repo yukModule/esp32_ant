@@ -38,6 +38,8 @@ def rot_move(bot_id, a, c):
     '''令机器人朝向某角度a, 容许角度误差为c'''
     now_x, now_y, now_angle = goal_now_posture(bot_id)
     motor_R_l, motor_L_l = 0, 0
+    a = int(a)
+    c = int(c)
     while True:
         now_x, now_y, now_angle = goal_now_posture(bot_id) # 通过视觉获取机器人当前坐标
         angle_err = now_angle - a # 获取角度偏差
@@ -56,8 +58,13 @@ def rot_move(bot_id, a, c):
         else:
             break
 
-        motor_L_l, motor_R_l = send_optimize(bot_id, motor_L, motor_R, motor_L_l, motor_R_l)
-    
+        if motor_R != motor_R_l or motor_L != motor_L_l: 
+            with contextlib.suppress(Exception): # 尝试发送
+                trim_cmd_and_send(motor_L, motor_R, bot_id)
+            motor_R_l = motor_R
+            motor_L_l = motor_L
+            sleep(0.1) # 等待机器人TCP中断处理
+
     sleep(0.1)
     trim_cmd_and_send(0, 0, bot_id)
     print(bot_id, '已到旋转到',a)
@@ -87,7 +94,12 @@ def rotp_move(bot_id, x, y, a):
             break
 
         # 减轻服务器负担，提高相应速度，只有与上一次数据不同时才发送
-        motor_L_l, motor_R_l = send_optimize(bot_id, motor_L, motor_R, motor_L_l, motor_R_l)
+        if motor_R != motor_R_l or motor_L != motor_L_l: 
+            with contextlib.suppress(Exception): # 尝试发送
+                trim_cmd_and_send(motor_L, motor_R, bot_id)
+            motor_R_l = motor_R
+            motor_L_l = motor_L
+            sleep(0.1) # 等待机器人TCP中断处理
 
     sleep(0.1)
     trim_cmd_and_send(0, 0, bot_id)
@@ -101,6 +113,8 @@ def line_move(x,y,bot_id,a,r):
     '''直线运动到目标点'''
     now_x, now_y, now_angle = goal_now_posture(bot_id)
     motor_R_l, motor_L_l = 0, 0
+    r = int(r)
+    a = int(a)
     while allowable_error(now_x, now_y, x, y, r): #如果不在目标范围内 则执行
         now_x, now_y, now_angle = goal_now_posture(bot_id) # 通过视觉获取机器人当前坐标
         angle_err = now_angle - get_angle(now_x, now_y, x, y) # 获取角度偏差
@@ -123,7 +137,13 @@ def line_move(x,y,bot_id,a,r):
             motor_L = 500
 
         # 减轻服务器负担，提高相应速度，只有与上一次数据不同时才发送
-        motor_L_l, motor_R_l = send_optimize(bot_id, motor_L, motor_R, motor_L_l, motor_R_l)
+        if motor_R != motor_R_l or motor_L != motor_L_l: 
+            with contextlib.suppress(Exception): # 尝试发送
+                trim_cmd_and_send(motor_L, motor_R, bot_id)
+            motor_R_l = motor_R
+            motor_L_l = motor_L
+            sleep(0.1) # 等待机器人TCP中断处理
+
 
     sleep(0.1)
     trim_cmd_and_send(0, 0, bot_id)
