@@ -15,14 +15,14 @@ wlan = None  # wlan
 listenSocket = None  # 套接字
 ret, conn = None, None
 first_send = 1
-CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/m', '/setcolor', '/name', '/show', '/team', '/randomcolor']
+CMD_CLASS = ['/connect', '/say2wifi', '/say2inf', '/m', '/setcolor', '/show', '/team']
 
 class cmd:
     '''命令行接口'''
     
     def __init__(self):
         self.cmd_list = []
-        self.CMD_RUN = [self.connect, self.say2wifi, self.say2inf, self.move, self.setcolor, self.name, self.show, self.team, self.randomcolor]
+        self.CMD_RUN = [self.connect, self.say2wifi, self.say2inf, self.move, self.setcolor, self.show, self.team]
         self.ws2812_color = ['0', '0', '0']
         self.bot_name = 'Ant'
         self.bot_team = 'A'
@@ -75,13 +75,6 @@ class cmd:
         WS2812.setColor(self.cmd_list[1], self.cmd_list[2], self.cmd_list[3])
         self.ws2812_color = self.cmd_list[1:]
 
-    def name(self):
-        '''/name <bot名> # 设置bot名'''
-        self.bot_name = self.cmd_list[1]
-        config_dict['bot_name'] = self.cmd_list[1]
-        save_()
-        
-    
     def show(self):
         '''/show # 发送bot信息到udp客户端'''
         data = f'name:{self.bot_name}\ncolor:{self.ws2812_color}\nteam:{self.bot_team}\n'
@@ -93,9 +86,6 @@ class cmd:
         config_dict['team'] = self.cmd_list[1]
         save_()
 
-    def randomcolor(self):
-        '''/randomcolor # 随机颜色'''
-        WS2812.random_color()
 
 bot = cmd() # 创建机器人命令处理
 
