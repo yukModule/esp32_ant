@@ -2,7 +2,7 @@ import network
 import socket
 import time
 import control
-import WS2812
+import WS2812 # 亮起红灯
 from save_load import *
 import _thread
 from time import sleep
@@ -103,6 +103,7 @@ def creat_bot(name, team):
 def connectWifi(ssid,passwd): 
     '''链接WiFi'''  
     global wlan
+    WS2812.setColor(255, 255, 0) # 亮起黄灯
     wlan = network.WLAN(network.STA_IF) 
     wlan.active(True)   #激活网络
     wlan.disconnect()   #断开WiFi连接
@@ -110,7 +111,6 @@ def connectWifi(ssid,passwd):
     while(wlan.ifconfig()[0] == '0.0.0.0'):   #等待连接
         time.sleep(1)
     print('network config:', wlan.ifconfig())
-    WS2812.setColor(255, 255, 0)
     return True
 
 def send2wifi(data):
@@ -125,7 +125,7 @@ def first_send_date():
               +' '+ get_config_var()['aruco_id']
               +' '+ get_config_var()['bot_name']
               +' '+ get_config_var()['team'])
-    WS2812.setColor(0, 0, 0)
+    WS2812.setColor(0, 0, 0) # 灭灯
 
 
 
@@ -144,7 +144,7 @@ def creat_server():
 
     while True:
         print("accepting.....")
-        WS2812.setColor(0, 255, 0)
+        WS2812.setColor(0, 255, 0) # 亮起绿灯
         conn, addr = listenSocket.accept()   #接收连接请求，返回收发数据的套接字对象和客户端地址
         print(addr, "connected")
 

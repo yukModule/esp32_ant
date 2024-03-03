@@ -1,13 +1,8 @@
-def op(x,y,a,b):
-    if x != a or y != b :
-        x = a
-        y = b
-    return x, y
-
-lx = 0
-ly = 1
-a = 1
-b = 1
-
-lx, ly = op(lx, ly, a, b)
-print(lx, ly)
+import math
+x = 0
+y = 0
+m = 6
+angle = -90
+x = x + m*math.cos(math.radians(angle))
+y = y + m*math.sin(math.radians(angle))
+print(x,y)
