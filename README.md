@@ -73,39 +73,6 @@
 | pin26 | 红外发射 |
 | pin32 | 电池ADC |
 
-### 物料清单
-
-| No. | Quantity | Comment              | Designator              | Footprint                           | Value | Manufacturer Part    | Manufacturer    | Supplier Part | Supplier |
-|-----|----------|----------------------|-------------------------|-------------------------------------|-------|----------------------|-----------------|---------------|----------|
-| 1   | 1        | 100nF                | C1                      | C0603                               | 100nF |                      |                 |               |          |
-| 2   | 1        | 10uf                 | C6                      | C0603                               |       |                      |                 |               |          |
-| 3   | 1        | 1uf                  | C7                      | C0603                               |       |                      |                 |               |          |
-| 4   | 2        | 10uf                 | C8,C9                   | C0603                               | 10uf  |                      |                 |               |          |
-| 5   | 2        | 1uf                  | C10,C11                 | C0603                               | 1uf   |                      |                 |               |          |
-| 6   | 1        | 22uf                 | C12                     | C0603                               | 22uf  |                      |                 |               |          |
-| 7   | 1        | 100nf                | C13                     | C0603                               | 100nf |                      |                 |               |          |
-| 8   | 1        | ESP32-WROOM-32       | ESP-WROOM-32            | WIFIM-SMD_ESP-WROOM-32              |       | ESP32-WROOM-32       | ESPRESSIF(乐鑫)   | C95209        | LCSC     |
-| 9   | 2        | -                    | GND,GND1                | HDR-TH_1P-P2.54-V-M                 |       | -                    | BOOMELE(博穆精密)   | C81276        | LCSC     |
-| 10  | 1        | IRM-3638T            | IR1                     | OPTO-TH_IRM-3638T                   |       | IRM-3638T            | EVERLIGHT(亿光)   | C16216        | LCSC     |
-| 11  | 4        | 19-213/R6W-BP2Q2B/3T | LED1,LED2,LED-CH,LED-CO | LED0603-R-RD                        |       | 19-213/R6W-BP2Q2B/3T | EVERLIGHT(台湾亿光) | C181863       | LCSC     |
-| 12  | 2        | 2.54-1*2P母           | M1,M2                   | HDR-TH_2P-P2.54-V-F                 |       | 2.54-1*2P母           | BOOMELE(博穆精密)   | C49661        | LCSC     |
-| 13  | 1        | MICRO 5.9ZB5.0       | MICRO_B2                | MICRO-USB-SMD_MICRO-5.9ZB5.0        |       | MICRO 5.9ZB5.0       | SHOU HAN(首韩)    | C456005       | LCSC     |
-| 14  | 1        | MSK-12C01-07         | Power                   | SW-SMD_MSK12CO2-BDM                 |       | MSK-12C01-07         |                 | C9900005167   | LCSC     |
-| 15  | 2        | S8050 J3Y            | Q3,Q4                   | SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR   |       | S8050 J3Y            | CBI(创基)         | C2828466      | LCSC     |
-| 16  | 1        | S9013                | Q5                      | SOT-23-3_L2.9-W1.6-P1.90-LS2.8-BR   |       | S9013                | Hottech(合科泰)    | C181163       | LCSC     |
-| 17  | 2        | AO3400A              | Q6,Q7                   | SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR   |       | AO3400A              | HUASHUO(华朔)     | C700953       | LCSC     |
-| 18  | 5        | 10K                  | R1,R5,R6,R7,R9          | R0805                               | 10K   |                      |                 |               |          |
-| 19  | 2        | 1k                   | R18,R19                 | R0805                               | 1k    | RC0603FR-07330RL     | YAGEO(国巨)       |               | LCSC     |
-| 20  | 4        | 1k                   | R27,R29,R30,R31         | R0805                               | 1k    |                      |                 |               |          |
-| 21  | 1        | 4.7k                 | R28                     | R0805                               | 4.7k  |                      |                 |               |          |
-| 22  | 2        | SMD3X4               | RDL,RS                  | SW-SMD_L4.0-W3.0-LS4.8              |       | SMD3X4               |                 | C9900013942   | LCSC     |
-| 23  | 1        | CH340K               | U7                      | ESOP-10_L4.9-W3.9-P1.00-LS6.2-BL-EP |       | CH340K               | WCH(南京沁恒)       | C968586       | LCSC     |
-| 24  | 1        | TP4059               | U8                      | SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR   |       | TP4059               | TOPPOWER(南京拓微)  | C80364        | LCSC     |
-| 25  | 1        | RT9193-33GB          | U9                      | SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BL   |       | RT9193-33GB          | RICHTEK(立锜)     | C15651        | LCSC     |
-| 26  | 2        | +                    | VCC,VCC1                | HDR-TH_1P-P2.54-V-M                 |       | +                    | BOOMELE(博穆精密)   | C81276        | LCSC     |
-| 27  | 1        | 5050WS2812B          | WS2812                  | LED-SMD_5050WS2812B                 |       | 5050WS2812B          |                 | C2874876      | LCSC     |
-
-
 ## 快速上手
 ❗必须**先用usb数据线**将机器人与电脑连接后**再打开机器人电源开关**，机器人电源开关在底部
 ❗当机器人死机无法进入系统时，只需要**关闭再打开机器人电源** 或者按下res开关
@@ -128,14 +95,16 @@ PASSWORD <WiFi密码>
 SSID <WiFi名，确保机器人与上位机共用同一局域网>
 bot_name <机器人名>
 team <机器人队伍名>
+aruco_id <机器人顶部粘贴的Aruco码>
 
 参考
 main on
 wifi on
-PASSWORD abc123123abc1237
-SSID mkm_iqoowifi
+PASSWORD 66666666pi
+SSID MKM_PRO8
 bot_name yuk2
 team blue
+aruco_id [8]
 
 ```
 
@@ -155,8 +124,6 @@ team blue
    - TCP服务器，接收命令处理与任务分配
 - **save_load**.py
    - 读取和保存config中的配置
-- **sthread**.py
-   - 多线程class
 - **WS2812**.py
    - ws2812RGB灯驱动
 
@@ -164,14 +131,11 @@ team blue
 - `/connect <wifi名> <wifi密码>` 执行后设置并保存WiFi名和密码，连接该WiFi，开启TCP服务器
 - `/say2wifi <信息>` 执行后通过TCP发送该<信息> 到客户端
 - `/say2inf <信息>` 执行后通过调用红外发送该<信息>
-- `/move <左电机pwm> <右电机pwm> # 控制电机转速` freq=1000 执行后设置当前电机PWM 0~1000
-- `/sleep <sleep/wake> `  停止运动且不在执行/move指令
+- `/m <左电机pwm> <右电机pwm> # 控制电机转速` freq=1000 执行后设置当前电机PWM 0~1000
 - `/setcolor <r> <g> <b> ` 设置当前ws2812颜色 范围0~255
-- `/name <bot名>`  设置机器人名
 - `/show ` 执行后通过TCP发送机器人信息到客户端
 	- 内容包括：名，睡眠状态，ws2812颜色，队伍名
 - `/team <队伍名> ` 设置机器人队伍
-- `/randomcolor`  随机ws2812的颜色一次
 
 ### PC端启动
 - 相机标定
@@ -183,6 +147,8 @@ team blue
 ### PC客户端指令
 - `/liveip` 查看当前已经建立的连接
 - `/rescan` 从新扫描并建立新的连接
-- `/send [8] /wryyyyy` 向id为[8]的机器人发送**/wryyyyy**
-- `/line [8] x y` 令 id为[8]的机器人 沿直线运动到(x,y)
-- `/arc [8] x0 y0 x1 y1` 令 id为[8]的机器人 以(x0,y0)为圆心 短弧为轨迹 运动到 (x1,y1)
+- `/send [8] /show` 向 机器人[8] 发送 /show
+- `/line [8] x y a r` 令 机器人[8] 沿直线运动到(x,y) 角度容许误差为a 目标半径为r
+- `/arc [9] x0 y0 x1 y1` 令 机器人[8] 以(x0,y0)为圆心 短弧为轨迹 运动到 (x1,y1)
+- `/rot [8] a c` 令 机器人[8] 旋转到角度a 容许角度误差为c
+- `/rotp [8] x y c` 令 机器人[8] 旋转并指向(x,y) 容许角度误差为c

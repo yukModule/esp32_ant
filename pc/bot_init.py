@@ -106,6 +106,7 @@ def cmd(cmds):
     - /line [8] x y a r 令 机器人[8] 沿直线运动到(x,y) 角度容许误差为a 目标半径为r
     - /arc [9] x0 y0 x1 y1 令 机器人[8] 以(x0,y0)为圆心 短弧为轨迹 运动到 (x1,y1)
     - /rot [8] a c 令 机器人[8] 旋转到角度a 容许角度误差为c
+    - /rotp [8] x y c 令 机器人[8] 旋转并指向(x,y) 容许角度误差为c
     '''
     global bot_dic, cmd_list
     CMD_RUN = [rescan, liveip, send, line, rot, rotp]
