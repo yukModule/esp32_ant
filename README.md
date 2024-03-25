@@ -1,4 +1,4 @@
-# 震动驱动机器人
+# <center>震动行走机器人🤖</center>
 
 ## 🚀参考
 - [振动驱动的微型机器人非完整约束补偿的定位方法 (engineering.org.cn)](https://www.engineering.org.cn/ch/article/16557/detail)
