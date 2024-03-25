@@ -12,6 +12,9 @@
 ![预览](/img/背面.png)
 
 ![演示](/video/演示.mp4)
+<video id="video" controls="" preload="none" poster="封面">
+      <source id="mp4" src="mp4格式视频" type="video/演示.mp4">
+</videos>
 
 ![原理图](/img/原理图.png)
 
