@@ -1,12 +1,13 @@
 # 震动驱动机器人
 
-## 参考
+## 🚀参考
 - [振动驱动的微型机器人非完整约束补偿的定位方法 (engineering.org.cn)](https://www.engineering.org.cn/ch/article/16557/detail)
 - [NN机器人--微型视觉控制振动机器人 - 嘉立创EDA开源硬件平台 (oshwhub.com)](https://oshwhub.com/shukkkk/zhen-dong-ji-qi-ren_copy_copy_copy)
 - [【ESP32最全学习笔记（基础篇）——4.ESP32 引脚介绍】「已注销」的博客-CSDN博客](https://blog.csdn.net/m0_46509684/article/details/129105888)
 - [kilobot-超赞的集群机器人 - 知乎 (zhihu.com)](https://zhuanlan.zhihu.com/p/439647295)
 - [GPIO模拟时序控制外设4——红外发射管-CSDN博客](https://blog.csdn.net/qq_41954556/article/details/131414915)
 
+## 💎预览
 ![预览](/img/正面.png)
 ![预览](/img/背面.png)
 
@@ -14,7 +15,7 @@
 
 ![原理图](/img/原理图.png)
 
-## 介绍
+## 📢介绍
 **项目**概述: 
 - 应用场景
 	1. 教学演示
@@ -26,7 +27,7 @@
 	4. NEC协议红外收发
 
 
-## 已知问题
+## ❗已知问题
 开发中遇到的**问题**:
 - [x] 【**已经解决**】pcb设计问题 pwm信号线与wifi天线太近，导致丢包严重
 	- 解决方案 
@@ -45,16 +46,16 @@
 		- 增厚pcb
 		- 反向焊接，探针头朝下
 
-## 技术协助
+## 👍技术协助
 你可以在一下获得**技术帮助**:
 - [GitHub](https://github.com/yukModule/)
 - [BiliBili](https://space.bilibili.com/22951795)
 
-## 参与作者
+## ✍参与作者
 - MkM
 	- bilibili 无我识l心空妙有
 
-## 主要硬件
+## ⭐主要硬件
 - CH340K 【TTL串口通信】
 - esp32-wroom-32u 【外置天线】
 - IRM-3638T 【红外接收】
@@ -75,10 +76,13 @@
 | pin26 | 红外发射 |
 | pin32 | 电池ADC |
 
-## 快速上手
+---
+
+## 🚀快速上手
 ❗必须**先用usb数据线**将机器人与电脑连接后**再打开机器人电源开关**，机器人电源开关在底部
 ❗当机器人死机无法进入系统时，只需要**关闭再打开机器人电源** 或者按下res开关
 
+### 🌏环境搭建
 1. 在Windows操作系统的电脑中**安装Thonny** [1. 开发环境搭建 (itprojects.cn)](https://doc.itprojects.cn/0006.zhishi.esp32/02.doc/index.html#/01.dajianhuanjing)
    [Python+ESP32 快速上手（持续更新中）【 通俗易懂 】_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1G34y1E7tE/)
 2. 在手机中安装**TCP调试工具**，或使用电脑的TCP调试工具，**端口号为7788**
@@ -90,7 +94,8 @@
 4. 打开esp32的 **config.txt** 修改配置信息
    ❗调试阶段建议 **清除main.py里的程序** 或 **关闭开机运行wifi**
    ❗运行 **main_.py** 必须设置 **main on**
-```
+```txt
+变量含义：
 main <功能: 进入死循环, 防止core1卡死、看门狗重启>
 wifi <当且仅当为on时开机启动wifi的TCP服务器>
 PASSWORD <WiFi密码>
@@ -99,7 +104,7 @@ bot_name <机器人名>
 team <机器人队伍名>
 aruco_id <机器人顶部粘贴的Aruco码>
 
-参考
+参考设置：
 main on
 wifi on
 PASSWORD 66666666pi
@@ -113,7 +118,7 @@ aruco_id [8]
 5. 相机标定
    1. https://blog.csdn.net/sunnyrainflower/article/details/131112182
 
-### 程序文件功能概述
+### 🔍程序文件功能概述
 - **boot**.py
    - esp32启动时执行的文件，不可删除，不建议在内部运行程序
 - **config**.txt
@@ -129,7 +134,7 @@ aruco_id [8]
 - **WS2812**.py
    - ws2812RGB灯驱动
 
-### 机器人TCP通信指令
+### ⌨机器人TCP通信指令
 - `/connect <wifi名> <wifi密码>` 执行后设置并保存WiFi名和密码，连接该WiFi，开启TCP服务器
 - `/say2wifi <信息>` 执行后通过TCP发送该<信息> 到客户端
 - `/say2inf <信息>` 执行后通过调用红外发送该<信息>
@@ -139,18 +144,18 @@ aruco_id [8]
 	- 内容包括：名，睡眠状态，ws2812颜色，队伍名
 - `/team <队伍名> ` 设置机器人队伍
 
-### PC端启动
+### 💻PC端配置与启动
 - 相机标定
   - 运行 `拍照.bat` 用不同的视角拍摄棋盘，数量越多越准确
   - 运行 `相机标定.bat` 通过拍照所得的图片生成相机标定文件
 - 确保机器人连接的WiFi是本机电脑开启的
 - 运行客户端 `客户端.bat`
 
-### PC客户端指令
+### ⌨客户端指令
 - `/liveip` 查看当前已经建立的连接
 - `/rescan` 从新扫描并建立新的连接
-- `/send [8] /show` 向 机器人[8] 发送 /show
-- `/line [8] x y a r` 令 机器人[8] 沿直线运动到(x,y) 角度容许误差为a 目标半径为r
-- `/arc [9] x0 y0 x1 y1` 令 机器人[8] 以(x0,y0)为圆心 短弧为轨迹 运动到 (x1,y1)
-- `/rot [8] a c` 令 机器人[8] 旋转到角度a 容许角度误差为c
-- `/rotp [8] x y c` 令 机器人[8] 旋转并指向(x,y) 容许角度误差为c
+- `/send [8] /show` 向 机器人[8]号 发送 /show
+- `/line [8] x y ae r` 令 机器人[8]号 沿直线运动到(x,y) 角度容许误差为ae 目标半径为r
+- `/arc [9] x0 y0 x1 y1` 令 机器人[8]号 以(x0,y0)为圆心 短弧为轨迹 运动到 (x1,y1)
+- `/rot [8] a ae` 令 机器人[8]号 旋转到角度a 容许角度误差为ae
+- `/rotp [8] x y ae` 令 机器人[8]号 旋转并指向(x,y) 容许角度误差为ae
