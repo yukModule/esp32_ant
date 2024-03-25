@@ -68,7 +68,7 @@ def binding_ip_id():
 
 def line():
     '''
-    cmd_list : /line [8] x y
+    cmd_list : /line [8] x y e r
     '''
     global cmd_list, bot_dic, id_ip_dic
     
