@@ -3,6 +3,7 @@ import bot_init as bot_
 import contextlib
 import math
 from time import sleep
+from numpy import sign
 
 tick = 1
 delay = 1 # 需要测试调试
@@ -120,8 +121,16 @@ def allowable_error(x1, y1, x2, y2, al_er):
     return (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) > al_er*al_er
 
 # 有预测控制
-def line_move(x,y,bot_id,a,r):
-    '''直线运动到目标点'''
+def line_move(x,y,bot_id,a,r,conn):
+    '''# 滑模运动到目标点
+    - x,y: 目标坐标
+    - bot_id: 机器人id
+    - a: 允许角度误差, 通常为8
+    - r: 目标半径, 通常为2
+    - conn: 
+        - 0:连续运行
+        - 1:非连续运行
+    '''
     global tick, delay
     now_x, now_y, now_angle = goal_now_posture(bot_id)
     motor_R_l, motor_L_l = 0, 0
@@ -152,6 +161,58 @@ def line_move(x,y,bot_id,a,r):
         # 减轻服务器负担，提高相应速度，只有与上一次数据不同时才发送
         motor_L_l, motor_R_l = send_optimize(bot_id, motor_L, motor_R, motor_L_l, motor_R_l)
 
-    sleep(0.1)
-    trim_cmd_and_send(0, 0, bot_id)
-    print(bot_id, '已到达', x, y)
+    if conn:
+        sleep(0.1)
+        trim_cmd_and_send(0, 0, bot_id)
+        print(bot_id, '已到达', x, y)
+
+def arc_move(r, cita, bot_id, rp, e):
+    '''
+    - r: 转弯半径
+    - cita: 转弯角度, >0右转; <0左转
+    - bot_id: 机器人id
+    - rp: 目标半径
+    - e: 允许角度误差
+    '''
+    
+    motor_L_l, motor_R_l = 0, 0
+    now_x, now_y, now_angle = goal_now_posture(bot_id)
+    now_angle_p = now_angle - 90
+
+    ## 计算圆心坐标
+    ax = math.cos(math.radians(now_angle_p))*r*sign(cita) + now_x
+    ay = math.sin(math.radians(now_angle_p))*r*sign(cita) + now_y
+    print('圆心坐标:', ax, ay)
+
+    ## 创建插值路径点
+    list_x = []
+    list_y = []
+    for i in range(0, cita, 5*sign(cita)):
+        cita_n = now_angle_p-i if cita<0 else now_angle_p-i-180
+        if cita_n < -180: # [-180, 180]
+            cita_n += 360
+        if cita_n > 180:
+            cita_n -= 360
+        cita_n = math.radians(cita_n)
+
+        xp = ax + math.cos(cita_n)*r
+        yp = ay + math.sin(cita_n)*r
+        list_x.append(xp)
+        list_y.append(yp)
+
+    print(len(list_x), '个路径点创建成功')
+
+    ## 按顺序走到路径点
+    while True:
+        x_new = list_x.pop(0)
+        y_new = list_y.pop(0)
+
+        line_move(x_new,y_new,bot_id,e,rp,0)
+        print('到达', x_new,y_new)
+
+        if not list_x:
+            sleep(0.1)
+            trim_cmd_and_send(0, 0, bot_id)
+            print(bot_id, '已到达')
+            break
+       
