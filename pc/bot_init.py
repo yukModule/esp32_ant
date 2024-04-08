@@ -97,7 +97,7 @@ def rot():
     global cmd_list, bot_dic, id_ip_dic
     line_task = threading.Thread(target=control.rot_move, args=(cmd_list[1], cmd_list[2], cmd_list[3]))
     line_task.start()
-    print('线程line指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
+    print('线程rot指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
 
 def rotp():
     '''
@@ -106,7 +106,7 @@ def rotp():
     global cmd_list, bot_dic, id_ip_dic
     line_task = threading.Thread(target=control.rotp_move, args=(cmd_list[1], float(cmd_list[2]), float(cmd_list[3]), float(cmd_list[4])))
     line_task.start()
-    print('线程line指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
+    print('线程rotp指令已经对', cmd_list[1], '开始执行，期间不可对其执行其他指令')
 
 def help():
     print('''
