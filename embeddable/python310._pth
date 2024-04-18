@@ -1,0 +1,5 @@
+python310.zip
+.
+../pc
+# Uncomment to run site.main() automatically
+import site
