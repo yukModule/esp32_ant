@@ -1,6 +1,6 @@
 @echo off
 chcp 65001
 
-"./pyvenv/Scripts/python.exe" "./pc/main.py"
+"./embeddable/python.exe" "./pc/main.py"
 
 pause
